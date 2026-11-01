@@ -7,12 +7,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract AUREN project ZIP
-        run: unzip -o AUREN_v1_Foundation.zip -d .
+      - name: Extract updated AUREN project
+        run: unzip -o AUREN_v1_1_Foundation_Fixed.zip -d .
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -25,12 +26,13 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
+      - name: Build AUREN debug APK
         working-directory: AUREN_v1_Foundation
         run: gradle --no-daemon assembleDebug
 
-      - name: Upload APK
+      - name: Upload AUREN APK
         uses: actions/upload-artifact@v4
         with:
-          name: AUREN-v1.0-debug
+          name: AUREN-v1.1-debug
           path: AUREN_v1_Foundation/app/build/outputs/apk/debug/app-debug.apk
+          
