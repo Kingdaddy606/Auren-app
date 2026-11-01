@@ -4,6 +4,9 @@ name: Build AUREN APK
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,8 +15,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract updated AUREN project
-        run: unzip -o AUREN_v1_1_Foundation_Fixed.zip -d .
+      - name: Extract AUREN source ZIP
+        run: unzip -o AUREN_Real_v1_Foundation.zip -d .
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -27,12 +30,13 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build AUREN debug APK
-        working-directory: AUREN_v1_Foundation
+        working-directory: AUREN_Real_v1
         run: gradle --no-daemon assembleDebug
 
       - name: Upload AUREN APK
         uses: actions/upload-artifact@v4
         with:
-          name: AUREN-v1.1-debug
-          path: AUREN_v1_Foundation/app/build/outputs/apk/debug/app-debug.apk
+          name: AUREN-Real-v1.0-debug
+          path: AUREN_Real_v1/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
           
