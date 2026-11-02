@@ -15,8 +15,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract AUREN AI Control v3
-        run: unzip -o AUREN_AI_Control_v3.zip -d .
+      - name: Verify AUREN source ZIP
+        run: |
+          if [ ! -f AUREN_AI_Control_v3_Fixed_Memory_Reset.zip ]; then
+            echo "ERROR: AUREN source ZIP was not found."
+            exit 1
+          fi
+
+      - name: Extract AUREN source ZIP
+        run: |
+          unzip -o AUREN_AI_Control_v3_Fixed_Memory_Reset.zip -d .
+
+      - name: Verify extracted project
+        run: |
+          if [ ! -d AUREN_AI_Control_v3 ]; then
+            echo "ERROR: AUREN project folder was not found."
+            exit 1
+          fi
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -29,14 +44,14 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build AUREN APK
+      - name: Build AUREN debug APK
         working-directory: AUREN_AI_Control_v3
         run: gradle --no-daemon assembleDebug
 
-      - name: Upload APK
+      - name: Upload AUREN APK
         uses: actions/upload-artifact@v4
         with:
-          name: AUREN-AI-Control-v3-debug
+          name: AUREN-AI-Control-v3-Memory-Reset
           path: AUREN_AI_Control_v3/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           
